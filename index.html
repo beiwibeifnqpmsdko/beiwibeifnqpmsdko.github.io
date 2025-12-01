@@ -69,8 +69,8 @@
   .card h2 { margin:0 0 8px 0; font-size:1.1rem; color:var(--accent) }
   .card p { margin:0; color:var(--muted) }
 
-  /* birthday */
-  #countdown {
+  /* countdown */
+  #countdown, .countdown {
     font-size:1.6rem;
     text-align:center;
     margin-top:6px;
@@ -80,6 +80,12 @@
     font-size:0.9rem;
     color:var(--muted);
   }
+
+  /* holiday specific styles */
+  .halloween { border-left: 4px solid #FF6B35; }
+  .christmas { border-left: 4px solid #2E7D32; }
+  .easter { border-left: 4px solid #9C27B0; }
+  .birthday { border-left: 4px solid #E91E63; }
 
   /* spotify area */
   .spotify-embed {
@@ -178,11 +184,32 @@
   </header>
 
   <main class="grid">
-    <!-- CARD: Countdown -->
-    <section class="card" id="card-countdown" aria-label="birthday countdown">
-      <h2>Birthday Countdown</h2>
-      <div id="countdown" aria-live="polite">—</div>
-      <p class="small" style="margin-top:8px">Countdown updates every second. Birthday is set to <strong>3 December</strong> (you can change the date in the code).</p>
+    <!-- CARD: Birthday Countdown -->
+    <section class="card birthday" id="card-countdown" aria-label="birthday countdown">
+      <h2>Mom's Birthday Countdown</h2>
+      <div id="countdown" class="countdown" aria-live="polite">—</div>
+      <p class="small" style="margin-top:8px">Countdown updates every second. Birthday is set to <strong>3 December</strong>.</p>
+    </section>
+
+    <!-- CARD: Halloween Countdown -->
+    <section class="card halloween" id="card-halloween" aria-label="halloween countdown">
+      <h2>Halloween Countdown</h2>
+      <div id="halloween-countdown" class="countdown" aria-live="polite">—</div>
+      <p class="small" style="margin-top:8px">Countdown to <strong>31 October</strong>.</p>
+    </section>
+
+    <!-- CARD: Christmas Countdown -->
+    <section class="card christmas" id="card-christmas" aria-label="christmas countdown">
+      <h2>Christmas Countdown</h2>
+      <div id="christmas-countdown" class="countdown" aria-live="polite">—</div>
+      <p class="small" style="margin-top:8px">Countdown to <strong>25 December</strong>.</p>
+    </section>
+
+    <!-- CARD: Easter Countdown -->
+    <section class="card easter" id="card-easter" aria-label="easter countdown">
+      <h2>Easter Countdown</h2>
+      <div id="easter-countdown" class="countdown" aria-live="polite">—</div>
+      <p class="small" style="margin-top:8px">Countdown to Easter Sunday (date changes yearly).</p>
     </section>
 
     <!-- CARD: Spotify + Song of the Day -->
@@ -328,6 +355,85 @@
   }
   update();
   setInterval(update, 1000);
+})();
+
+/* ------------------------------
+   ADDITIONAL COUNTDOWNS
+   ------------------------------ */
+(function(){
+  // Function to calculate Easter Sunday for a given year
+  function getEasterDate(year) {
+    const a = year % 19;
+    const b = Math.floor(year / 100);
+    const c = year % 100;
+    const d = Math.floor(b / 4);
+    const e = b % 4;
+    const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3);
+    const h = (19 * a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4);
+    const k = c % 4;
+    const l = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = Math.floor((a + 11 * h + 22 * l) / 451);
+    const month = Math.floor((h + l - 7 * m + 114) / 31) - 1; // 0-based month
+    const day = ((h + l - 7 * m + 114) % 31) + 1;
+    return new Date(year, month, day);
+  }
+
+  // Function to calculate the next occurrence of a given date
+  function getNextDate(month, day, year = null) {
+    const now = new Date();
+    if (year === null) {
+      year = now.getFullYear();
+    }
+    let date = new Date(year, month - 1, day, 0, 0, 0);
+    if (now > date) {
+      date = new Date(year + 1, month - 1, day, 0, 0, 0);
+    }
+    return date;
+  }
+
+  // Function to update a countdown element
+  function updateCountdown(elementId, targetDate, celebrationMessage) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    const now = new Date();
+    const diff = Math.max(0, targetDate - now);
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    
+    if (diff <= 1000*60*60*24 && days===0) {
+      element.textContent = celebrationMessage;
+    } else {
+      element.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+  }
+
+  // Function to update all countdowns
+  function updateAllCountdowns() {
+    // Halloween Countdown (October 31)
+    const halloweenDate = getNextDate(10, 31);
+    updateCountdown('halloween-countdown', halloweenDate, "🎃 HAPPY HALLOWEEN! 🎃");
+    
+    // Christmas Countdown (December 25)
+    const christmasDate = getNextDate(12, 25);
+    updateCountdown('christmas-countdown', christmasDate, "🎄 MERRY CHRISTMAS! 🎄");
+    
+    // Easter Countdown (calculate dynamically)
+    const now = new Date();
+    let easterDate = getEasterDate(now.getFullYear());
+    if (now > easterDate) {
+      easterDate = getEasterDate(now.getFullYear() + 1);
+    }
+    updateCountdown('easter-countdown', easterDate, "🐰 HAPPY EASTER! 🐰");
+  }
+
+  // Initial update and then update every second
+  updateAllCountdowns();
+  setInterval(updateAllCountdowns, 1000);
 })();
 
 /* ------------------------------
