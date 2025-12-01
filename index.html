@@ -227,7 +227,7 @@
 <body>
 <div class="page">
   <header>
-    <div class="typing">Happy Birthday Mom! ❤️</div>
+    <div class="typing">Happy Birthday Mom! ❤️   </div>
     <div class="small" style="margin-top:10px">A page I made — feel free to ask for changes anytime loser.</div>
   </header>
 
@@ -601,7 +601,7 @@
     if(metaJSON){
       try {
         const meta = JSON.parse(metaJSON);
-        sotdTitle.textContent = "SONG OF THE DAY IS: " + (meta.title || `Song ${tid}`);
+        sotdTitle.textContent = "SONG OF THE DAY IS: " + (`Song ${tid}`);
         sotdArtist.textContent = meta.artist || "";
         return;
       } catch(e){}
