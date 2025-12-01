@@ -87,6 +87,38 @@
   .easter { border-left: 4px solid #9C27B0; }
   .birthday { border-left: 4px solid #E91E63; }
 
+  /* music section */
+  .music-section {
+    margin-top: 30px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.96));
+    border-radius:18px;
+    padding:25px;
+    box-shadow: 0 8px 30px rgba(92,58,33,0.08);
+  }
+  .music-section h2 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    color: var(--accent);
+  }
+  .music-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .playlist-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+  }
+  .sotd-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+  }
+
   /* spotify area */
   .spotify-embed {
     display:flex;
@@ -116,6 +148,19 @@
   }
 
   /* timeline */
+  .timeline-section {
+    margin-top: 30px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.96));
+    border-radius:18px;
+    padding:25px;
+    box-shadow: 0 8px 30px rgba(92,58,33,0.08);
+  }
+  .timeline-section h2 {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    color: var(--accent);
+  }
   .timeline { padding-left:12px; border-left:3px dashed rgba(92,58,33,0.06); }
   .event { margin:14px 0; padding-left:10px; position:relative; }
   .event h3 { margin:0 0 6px 0; font-size:1rem; }
@@ -173,6 +218,9 @@
 
   @media (max-width:420px){
     .typing { font-size:1.4rem; animation-duration:2.4s; }
+    .music-content {
+      flex-direction: column;
+    }
   }
 </style>
 </head>
@@ -183,7 +231,8 @@
     <div class="small" style="margin-top:10px">A little page I made — feel free to ask for adjustments.</div>
   </header>
 
-  <main class="grid">
+  <!-- COUNTDOWNS SECTION -->
+  <div class="grid">
     <!-- CARD: Birthday Countdown -->
     <section class="card birthday" id="card-countdown" aria-label="birthday countdown">
       <h2>Mom's Birthday Countdown</h2>
@@ -211,23 +260,26 @@
       <div id="easter-countdown" class="countdown" aria-live="polite">—</div>
       <p class="small" style="margin-top:8px">Countdown to Easter Sunday (date changes yearly).</p>
     </section>
+  </div>
 
-    <!-- CARD: Spotify + Song of the Day -->
-    <section class="card" id="card-spotify" aria-label="spotify playlist and song of the day">
-      <h2>Music & Song of the Day</h2>
-
-      <div class="spotify-embed">
-        <!-- playlist embed -->
-        <div id="playlist-embed">
+  <!-- MUSIC SECTION -->
+  <section class="music-section" id="music-section" aria-label="music section">
+    <h2>Music & Song of the Day</h2>
+    <div class="music-content">
+      <!-- playlist embed -->
+      <div class="playlist-container">
+        <div class="spotify-embed">
           <p class="muted">Playlist:</p>
           <iframe id="playlistIframe"
             src="https://open.spotify.com/embed/playlist/0F8yGT3rAJjinOwDGd6PVu"
             width="300" height="380" frameborder="0" allow="encrypted-media" style="border-radius:12px;">
           </iframe>
         </div>
+      </div>
 
-        <!-- song of the day -->
-        <div class="trackbox" style="width:100%;max-width:420px">
+      <!-- song of the day -->
+      <div class="sotd-container">
+        <div class="trackbox">
           <div id="sotd-status" class="muted">Selecting today's song…</div>
           <div id="sotd" style="display:none; width:100%;">
             <div class="track-info">
@@ -255,27 +307,27 @@
           <div style="margin-top:10px" class="muted small">Tip: If automatic works, you don't need to paste anything. If not, paste the list once and the page will use it from your browser storage.</div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- CARD: Timeline -->
-    <section class="card" id="card-timeline" aria-label="timeline of memories">
-      <h2>Our Memories</h2>
-      <div class="timeline">
-        <div class="event">
-          <h3>Childhood</h3>
-          <p>Funny moments and laughter from when I was little.</p>
-        </div>
-        <div class="event">
-          <h3>Recent Times</h3>
-          <p>Special trips, celebrations, and memories together.</p>
-        </div>
-        <div class="event">
-          <h3>More to come</h3>
-          <p>I'll add more memories here — or you can send some to include!</p>
-        </div>
+  <!-- TIMELINE SECTION -->
+  <section class="timeline-section" id="timeline-section" aria-label="timeline of memories">
+    <h2>Our Memories</h2>
+    <div class="timeline">
+      <div class="event">
+        <h3>Childhood</h3>
+        <p>Funny moments and laughter from when I was little.</p>
       </div>
-    </section>
-  </main>
+      <div class="event">
+        <h3>Recent Times</h3>
+        <p>Special trips, celebrations, and memories together.</p>
+      </div>
+      <div class="event">
+        <h3>More to come</h3>
+        <p>I'll add more memories here — or you can send some to include!</p>
+      </div>
+    </div>
+  </section>
 
   <footer>
     Made with 💖 — open the file on GitHub Pages or locally. If something looks off, tell me what you want changed.
