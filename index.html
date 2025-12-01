@@ -227,8 +227,8 @@
 <body>
 <div class="page">
   <header>
-    <div class="typing">Happy Birthday Mom! ❤️     </div>
-    <div class="small" style="margin-top:10px">A page I made — feel free to ask for changes whenever loser.</div>
+    <div class="typing">Happy Birthday Mom! ❤️</div>
+    <div class="small" style="margin-top:10px">A page I made — feel free to ask for changes anytime loser.</div>
   </header>
 
   <!-- COUNTDOWNS SECTION -->
@@ -258,7 +258,7 @@
     <section class="card easter" id="card-easter" aria-label="easter countdown">
       <h2>Easter Countdown</h2>
       <div id="easter-countdown" class="countdown" aria-live="polite">—</div>
-      <p class="small" style="margin-top:8px">Countdown to Easter Sunday</p>
+      <p class="small" style="margin-top:8px">Countdown to Easter Sunday.</p>
     </section>
   </div>
 
@@ -601,13 +601,13 @@
     if(metaJSON){
       try {
         const meta = JSON.parse(metaJSON);
-        sotdTitle.textContent = meta.title || `Song ${tid}`;
+        sotdTitle.textContent = "SONG OF THE DAY IS: " + (meta.title || `Song ${tid}`);
         sotdArtist.textContent = meta.artist || "";
         return;
       } catch(e){}
     }
     // fallback: display tid while we optionally try to fetch metadata via AllOrigins for the track page
-    sotdTitle.textContent = "Song ID: " + tid;
+    sotdTitle.textContent = "SONG OF THE DAY IS: Song ID: " + tid;
     sotdArtist.textContent = "";
 
     // attempt to fetch the track page to get title/artist (may be blocked by CORS)
@@ -631,7 +631,7 @@
           artist = parts[0];
           track = parts.slice(1).join(' - ');
         }
-        sotdTitle.textContent = track || t;
+        sotdTitle.textContent = "SONG OF THE DAY IS: " + (track || t);
         sotdArtist.textContent = artist || "";
         // cache metadata briefly
         try { localStorage.setItem(metaKey, JSON.stringify({title:track, artist:artist})); } catch(e){}
