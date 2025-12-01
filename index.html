@@ -1,170 +1,584 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Mom</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Happy Birthday Mom 💖</title>
+<link rel="icon" href="data:,">
 <style>
-    /* --- Basic Warm Family Theme --- */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(to bottom, #FFE5D9, #FFD6BA);
-        color: #5C3A21;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
-    h1, h2, h3 {
-        text-align: center;
-    }
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    /* --- Typing Text --- */
-    .typing {
-        border-right: .1em solid #5C3A21;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 0;
-        animation: typing 3s steps(40, end) forwards;
-        font-size: 2em;
-        margin-bottom: 30px;
-    }
-    @keyframes typing {
-        from { width: 0 }
-        to { width: 100% }
-    }
-    /* --- Timeline --- */
-    .timeline {
-        position: relative;
-        margin: 50px 0;
-        padding-left: 20px;
-        border-left: 2px solid #5C3A21;
-    }
-    .event {
-        margin: 20px 0;
-        position: relative;
-    }
-    .event::before {
-        content: '';
-        position: absolute;
-        left: -9px;
-        top: 0;
-        width: 16px;
-        height: 16px;
-        background: #FFB788;
-        border-radius: 50%;
-    }
-    /* --- Floating Hearts --- */
-    .heart {
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: pink;
-        transform: rotate(45deg);
-        animation: floatUp linear infinite;
-    }
-    .heart::before, .heart::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: pink;
-        border-radius: 50%;
-    }
-    .heart::before { top: -10px; left: 0; }
-    .heart::after { left: 10px; top: 0; }
-    @keyframes floatUp {
-        0% { transform: translateY(0) rotate(45deg); opacity: 1; }
-        100% { transform: translateY(-800px) rotate(45deg); opacity: 0; }
-    }
-    /* --- Countdown --- */
-    #countdown {
-        text-align: center;
-        font-size: 2em;
-        margin: 40px 0;
-    }
-    /* --- Spotify Playlist --- */
-    #spotify {
-        text-align: center;
-        margin: 30px 0;
-    }
+  :root{
+    --bg1: #FFE5D9;
+    --bg2: #FFD6BA;
+    --accent: #5C3A21;
+    --card: #fff7f3;
+    --muted: #7a5a47;
+    --glass: rgba(255,255,255,0.7);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Roboto, system-ui, Arial;
+    background: linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:var(--accent);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .page {
+    max-width:1000px;
+    margin:28px auto;
+    padding:20px;
+  }
+
+  header {
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .typing {
+    display:inline-block;
+    font-size:2rem;
+    font-weight:700;
+    border-right:2px solid var(--accent);
+    white-space:nowrap;
+    overflow:hidden;
+    width:0;
+    animation: typing 3s steps(30,end) forwards;
+    background:linear-gradient(90deg, rgba(255,255,255,0.0), rgba(255,255,255,0.25));
+    padding:8px 16px;
+    border-radius:12px;
+    box-shadow: 0 6px 20px rgba(92,58,33,0.07);
+    color:var(--accent);
+  }
+  @keyframes typing { from { width:0 } to { width:18ch } }
+
+  /* grid of cards */
+  .grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+    align-items:start;
+  }
+
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.96));
+    border-radius:18px;
+    padding:18px;
+    box-shadow: 0 8px 30px rgba(92,58,33,0.08);
+    position:relative;
+    overflow:hidden;
+  }
+  .card h2 { margin:0 0 8px 0; font-size:1.1rem; color:var(--accent) }
+  .card p { margin:0; color:var(--muted) }
+
+  /* birthday */
+  #countdown {
+    font-size:1.6rem;
+    text-align:center;
+    margin-top:6px;
+    font-weight:600;
+  }
+  .small {
+    font-size:0.9rem;
+    color:var(--muted);
+  }
+
+  /* spotify area */
+  .spotify-embed {
+    display:flex;
+    gap:12px;
+    flex-direction:column;
+    align-items:center;
+  }
+  .trackbox {
+    width:100%;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+  }
+  .track-info {
+    text-align:center;
+  }
+  .play-embed {
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow: 0 6px 18px rgba(92,58,33,0.06);
+  }
+  .muted {
+    color:var(--muted);
+    font-size:0.95rem;
+  }
+
+  /* timeline */
+  .timeline { padding-left:12px; border-left:3px dashed rgba(92,58,33,0.06); }
+  .event { margin:14px 0; padding-left:10px; position:relative; }
+  .event h3 { margin:0 0 6px 0; font-size:1rem; }
+  .event::before {
+    content:"";
+    position:absolute;
+    left:-21px;
+    top:6px;
+    width:14px; height:14px;
+    background: #FFB788;
+    border-radius:50%;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  }
+
+  /* hearts */
+  .heart {
+    position:fixed;
+    pointer-events:none;
+    width:18px; height:18px;
+    transform:rotate(45deg);
+    z-index:0;
+  }
+  .heart:before, .heart:after {
+    content:""; position:absolute; width:18px; height:18px; background:pink; border-radius:50%;
+  }
+  .heart:before { left:0; top:-9px }
+  .heart:after { left:9px; top:0 }
+
+  /* controls */
+  .controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px }
+  .btn {
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow: 0 6px 16px rgba(92,58,33,0.12);
+  }
+  .btn.secondary {
+    background:transparent;
+    color:var(--accent);
+    border:1px solid rgba(92,58,33,0.08);
+    box-shadow:none;
+  }
+
+  label{display:block; font-size:0.9rem; margin:8px 0 6px 0}
+  textarea, input[type="text"]{
+    width:100%; padding:8px; border-radius:10px; border:1px solid rgba(92,58,33,0.08);
+    font-family:inherit; font-size:0.95rem; resize:vertical;
+  }
+
+  footer{ margin-top:22px; text-align:center; color:var(--muted); font-size:0.9rem }
+
+  @media (max-width:420px){
+    .typing { font-size:1.4rem; animation-duration:2.4s; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-    <h1 class="typing">Happy Birthday Mom! ❤️</h1>
+<div class="page">
+  <header>
+    <div class="typing">Happy Birthday Mom! ❤️</div>
+    <div class="small" style="margin-top:10px">A little page I made — feel free to ask for adjustments.</div>
+  </header>
 
-    <!-- Countdown -->
-    <div id="countdown"></div>
+  <main class="grid">
+    <!-- CARD: Countdown -->
+    <section class="card" id="card-countdown" aria-label="birthday countdown">
+      <h2>Birthday Countdown</h2>
+      <div id="countdown" aria-live="polite">—</div>
+      <p class="small" style="margin-top:8px">Countdown updates every second. Birthday is set to <strong>3 December</strong> (you can change the date in the code).</p>
+    </section>
 
-    <!-- Spotify Playlist -->
-    <div id="spotify">
-        <h2>Listen to your playlist:</h2>
-        <iframe 
-            src="https://open.spotify.com/embed/playlist/0F8yGT3rAJjinOwDGd6PVu?si=TAjd3nArQeOtBk1Zh00Dlg" 
-            width="300" 
-            height="380" 
-            frameborder="0" 
-            allowtransparency="true" 
-            allow="encrypted-media">
-        </iframe>
-    </div>
+    <!-- CARD: Spotify + Song of the Day -->
+    <section class="card" id="card-spotify" aria-label="spotify playlist and song of the day">
+      <h2>Music & Song of the Day</h2>
 
-    <!-- Timeline of Memories -->
-    <div class="timeline">
-        <h2>Our Memories</h2>
+      <div class="spotify-embed">
+        <!-- playlist embed -->
+        <div id="playlist-embed">
+          <p class="muted">Playlist:</p>
+          <iframe id="playlistIframe"
+            src="https://open.spotify.com/embed/playlist/0F8yGT3rAJjinOwDGd6PVu"
+            width="300" height="380" frameborder="0" allow="encrypted-media" style="border-radius:12px;">
+          </iframe>
+        </div>
+
+        <!-- song of the day -->
+        <div class="trackbox" style="width:100%;max-width:420px">
+          <div id="sotd-status" class="muted">Selecting today's song…</div>
+          <div id="sotd" style="display:none; width:100%;">
+            <div class="track-info">
+              <div id="sotd-title" style="font-weight:700"></div>
+              <div id="sotd-artist" class="muted" style="margin-top:6px"></div>
+            </div>
+            <div id="sotd-player" class="play-embed" style="margin-top:10px"></div>
+            <div style="margin-top:8px; text-align:center;">
+              <a id="sotd-open" target="_blank" rel="noopener" class="small">Open in Spotify</a>
+            </div>
+          </div>
+
+          <!-- fallback / manual input -->
+          <div id="sotd-fallback" style="margin-top:12px; display:none; width:100%;">
+            <div class="muted">Automatic fetch couldn't get tracks (Spotify CORS/changes). Easy fallback:</div>
+            <label for="manualTracks">Paste playlist track URLs (one per line) or track IDs:</label>
+            <textarea id="manualTracks" rows="4" placeholder="https://open.spotify.com/track/XXXXXXXXX"></textarea>
+            <div class="controls" style="justify-content:flex-end;">
+              <button class="btn" id="saveManual">Save tracks</button>
+              <button class="btn secondary" id="clearManual">Clear</button>
+            </div>
+            <div id="manualSavedMsg" class="muted" style="margin-top:8px;"></div>
+          </div>
+
+          <div style="margin-top:10px" class="muted small">Tip: If automatic works, you don't need to paste anything. If not, paste the list once and the page will use it from your browser storage.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD: Timeline -->
+    <section class="card" id="card-timeline" aria-label="timeline of memories">
+      <h2>Our Memories</h2>
+      <div class="timeline">
         <div class="event">
-            <h3>Childhood</h3>
-            <p>Funny moments and laughter from when I was little.</p>
+          <h3>Childhood</h3>
+          <p>Funny moments and laughter from when I was little.</p>
         </div>
         <div class="event">
-            <h3>Recent Times</h3>
-            <p>Special trips, celebrations, and memories together.</p>
+          <h3>Recent Times</h3>
+          <p>Special trips, celebrations, and memories together.</p>
         </div>
-        <!-- Add more events here -->
-    </div>
+        <div class="event">
+          <h3>More to come</h3>
+          <p>I'll add more memories here — or you can send some to include!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with 💖 — open the file on GitHub Pages or locally. If something looks off, tell me what you want changed.
+  </footer>
 </div>
 
+<!-- floating hearts -->
 <script>
-    /* --- Floating Hearts --- */
-    const numHearts = 20;
-    for (let i = 0; i < numHearts; i++) {
-        let heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.animationDuration = 5 + Math.random() * 5 + 's';
-        heart.style.width = 15 + Math.random() * 15 + 'px';
-        heart.style.height = heart.style.width;
-        document.body.appendChild(heart);
+  // Generate floating hearts
+  (function spawnHearts(){
+    const N = 18;
+    for(let i=0;i<N;i++){
+      const h = document.createElement('div');
+      h.className='heart';
+      const size = 10 + Math.random()*18;
+      h.style.width = size+'px';
+      h.style.height = size+'px';
+      h.style.left = (Math.random()*100)+'vw';
+      h.style.top = (60 + Math.random()*35)+'vh';
+      h.style.opacity = 0.7 - Math.random()*0.5;
+      const dur = 8 + Math.random()*10;
+      h.style.transition = `transform ${dur}s linear, opacity ${dur}s linear`;
+      document.body.appendChild(h);
+      // animate
+      requestAnimationFrame(()=> {
+        h.style.transform = `translateY(-120vh) rotate(45deg)`;
+        h.style.opacity = 0;
+      });
+      // remove after animation
+      setTimeout(()=> h.remove(), (dur+0.5)*1000);
+      // spawn next little later
+      setTimeout(()=> {
+        if(i===N-1) spawnHearts(); // keep gentle looping
+      }, 1200*i);
     }
+  })();
+</script>
 
-    /* --- Countdown --- */
-    function updateCountdown() {
-        const now = new Date();
-        const year = now.getFullYear();
-        let birthday = new Date(`${year}-12-03T00:00:00`); // Replace MM-DD with her birthday
-        if (now > birthday) birthday.setFullYear(year + 1);
-        const diff = birthday - now;
+<script>
+/* ------------------------------
+   BIRTHDAY COUNTDOWN
+   Edit birthdayDateStr if you want to change the birthday.
+   Format: "YYYY-MM-DD" or "MM-DD" (keeps  current year)
+   ------------------------------ */
+(function(){
+  const birthdayDateStr = "12-03"; // month-day (3 Dec) — change here if needed
+  const countdownEl = document.getElementById('countdown');
 
-        const days = Math.floor(diff / (1000*60*60*24));
-        const hours = Math.floor((diff / (1000*60*60)) % 24);
-        const minutes = Math.floor((diff / (1000*60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
+  function computeNextBirthday() {
+    const now = new Date();
+    const parts = birthdayDateStr.split('-');
+    let month, day, year;
+    if (parts.length === 2) {
+      month = parseInt(parts[0],10); day = parseInt(parts[1],10); year = now.getFullYear();
+    } else {
+      year = parseInt(parts[0],10); month = parseInt(parts[1],10); day = parseInt(parts[2],10);
+    }
+    // Note: JS months are 0-based
+    let b = new Date(year, month-1, day, 0,0,0);
+    if (now > b) b = new Date(year+1, month-1, day,0,0,0);
+    return b;
+  }
 
-        const countdownEl = document.getElementById('countdown');
-        if (diff < 1000*60*60*24) {
-            countdownEl.innerHTML = "🎉 HAPPY BIRTHDAY! 🎉";
-        } else {
-            countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  function update() {
+    const now = new Date();
+    const target = computeNextBirthday();
+    const diff = Math.max(0, target - now);
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    if (diff <= 1000*60*60*24 && days===0) {
+      countdownEl.textContent = "🎉 HAPPY BIRTHDAY! 🎉";
+    } else {
+      countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+  }
+  update();
+  setInterval(update, 1000);
+})();
+
+/* ------------------------------
+   SONG OF THE DAY (random per day)
+   Strategy:
+   1) Try to scrape the public playlist page HTML via a CORS-relay (AllOrigins). This often works without API keys.
+   2) Parse track links (/track/{id}) from the HTML.
+   3) If that fails, show a friendly fallback where you can paste track URLs or IDs once (stored in localStorage).
+   4) Choose a "random" track for the day by seeding with the current date so it's stable across refreshes that day.
+   ------------------------------ */
+
+(function(){
+  const playlistId = "0F8yGT3rAJjinOwDGd6PVu"; // confirmed playlist
+  const playlistUrl = `https://open.spotify.com/playlist/${playlistId}`;
+  const sotdStatus = document.getElementById('sotd-status');
+  const sotdBox = document.getElementById('sotd');
+  const sotdPlayer = document.getElementById('sotd-player');
+  const sotdTitle = document.getElementById('sotd-title');
+  const sotdArtist = document.getElementById('sotd-artist');
+  const sotdOpen = document.getElementById('sotd-open');
+  const fallbackEl = document.getElementById('sotd-fallback');
+  const manualTextarea = document.getElementById('manualTracks');
+  const saveManualBtn = document.getElementById('saveManual');
+  const clearManualBtn = document.getElementById('clearManual');
+  const manualSavedMsg = document.getElementById('manualSavedMsg');
+
+  // util: extract track ids from a string (ids or full urls)
+  function extractTrackIds(text) {
+    if(!text) return [];
+    const ids = new Set();
+    // match full urls
+    const urlRegex = /open\.spotify\.com\/track\/([A-Za-z0-9]+)|spotify:track:([A-Za-z0-9]+)/g;
+    let m;
+    while((m = urlRegex.exec(text)) !== null) {
+      ids.add(m[1] || m[2]);
+    }
+    // also split by lines and try to accept bare ids
+    text.split(/\s+/).forEach(tok=>{
+      const clean = tok.trim();
+      if(/^[A-Za-z0-9]{8,32}$/.test(clean)) ids.add(clean);
+    });
+    return Array.from(ids);
+  }
+
+  // Save manual list
+  saveManualBtn.addEventListener('click', ()=>{
+    const ids = extractTrackIds(manualTextarea.value);
+    if(ids.length===0){
+      manualSavedMsg.textContent = "No track URLs/IDs found — paste lines like https://open.spotify.com/track/XXXXXXXX";
+      return;
+    }
+    localStorage.setItem('manualTracks_'+playlistId, JSON.stringify(ids));
+    manualSavedMsg.textContent = `Saved ${ids.length} tracks. The Song of the Day will use these.`;
+    setTimeout(()=> manualSavedMsg.textContent = "", 3500);
+    renderSongOfTheDay(ids);
+  });
+
+  // Clear manual
+  clearManualBtn.addEventListener('click', ()=>{
+    localStorage.removeItem('manualTracks_'+playlistId);
+    manualTextarea.value = "";
+    manualSavedMsg.textContent = "Cleared saved tracks.";
+    setTimeout(()=> manualSavedMsg.textContent = "", 2500);
+    // try to auto fetch again
+    init();
+  });
+
+  // Seeded random: hash a string to number
+  function hashStringToInt(s){
+    let h=2166136261;
+    for(let i=0;i<s.length;i++){
+      h ^= s.charCodeAt(i);
+      h += (h<<1) + (h<<4) + (h<<7) + (h<<8) + (h<<24);
+    }
+    return Math.abs(h >>> 0);
+  }
+  function seededPick(list, seedStr){
+    if(!list || list.length===0) return null;
+    const h = hashStringToInt(seedStr);
+    const idx = h % list.length;
+    return {id: list[idx], index: idx};
+  }
+
+  // render the chosen track (id or null)
+  function renderSongOfTheDay(trackIds){
+    if(!trackIds || trackIds.length===0) {
+      sotdStatus.textContent = "No tracks available yet.";
+      fallbackEl.style.display = 'block';
+      return;
+    }
+    fallbackEl.style.display = 'none';
+    const today = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+    const seed = playlistId + '|' + today;
+    const chosen = seededPick(trackIds, seed);
+    if(!chosen) {
+      sotdStatus.textContent = "Couldn't pick a track.";
+      return;
+    }
+    const tid = chosen.id;
+    sotdStatus.style.display = 'none';
+    sotdBox.style.display = 'block';
+
+    // Embed small track player
+    const embedHtml = `<iframe src="https://open.spotify.com/embed/track/${tid}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="border-radius:8px;"></iframe>`;
+    sotdPlayer.innerHTML = embedHtml;
+    sotdOpen.href = `https://open.spotify.com/track/${tid}`;
+    sotdOpen.textContent = "Open in Spotify";
+
+    // We will try to fetch the track title shown on the public playlist page if we have scraped it, otherwise show ID
+    // See if cached metadata exists
+    const metaKey = 'sotd_meta_'+tid;
+    const metaJSON = localStorage.getItem(metaKey);
+    if(metaJSON){
+      try {
+        const meta = JSON.parse(metaJSON);
+        sotdTitle.textContent = meta.title || `Song ${tid}`;
+        sotdArtist.textContent = meta.artist || "";
+        return;
+      } catch(e){}
+    }
+    // fallback: display tid while we optionally try to fetch metadata via AllOrigins for the track page
+    sotdTitle.textContent = "Song ID: " + tid;
+    sotdArtist.textContent = "";
+
+    // attempt to fetch the track page to get title/artist (may be blocked by CORS)
+    const prox = 'https://api.allorigins.win/raw?url=';
+    fetch(prox + encodeURIComponent('https://open.spotify.com/track/' + tid))
+    .then(r => r.text())
+    .then(html=>{
+      // try to extract <title>Artist – Song Name - Spotify</title>
+      const titleMatch = html.match(/<title[^>]*>([^<]+)/i);
+      if(titleMatch && titleMatch[1]){
+        // title often like "Artist – Track Name - Spotify"
+        const t = titleMatch[1].replace(/\s*-*\s*Spotify.*$/i,'').trim();
+        // try to split by " – " or " - "
+        let artist = "", track = t;
+        if(t.indexOf('–')!==-1){
+          const parts = t.split('–').map(s=>s.trim());
+          artist = parts[0];
+          track = parts.slice(1).join(' – ');
+        } else if(t.indexOf('-')!==-1){
+          const parts = t.split('-').map(s=>s.trim());
+          artist = parts[0];
+          track = parts.slice(1).join(' - ');
         }
+        sotdTitle.textContent = track || t;
+        sotdArtist.textContent = artist || "";
+        // cache metadata briefly
+        try { localStorage.setItem(metaKey, JSON.stringify({title:track, artist:artist})); } catch(e){}
+      }
+    }).catch(()=>{/* ignore metadata fetch errors */});
+  }
+
+  // Try to scrape playlist page for /track/{id} links
+  function scrapePlaylistTracksFromHtml(html){
+    const ids = new Set();
+    // find /track/ID occurrences
+    const re = /\/track\/([A-Za-z0-9]{8,64})/g;
+    let m;
+    while((m = re.exec(html)) !== null){
+      ids.add(m[1]);
     }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    return Array.from(ids);
+  }
+
+  // Try to fetch playlist HTML via AllOrigins (a free CORS proxy). This may fail sometimes.
+  function tryAutoFetchTracks(){
+    sotdStatus.textContent = "Trying to load playlist tracks automatically…";
+    const proxy = 'https://api.allorigins.win/raw?url=';
+    const target = playlistUrl;
+    // a promise that times out if slow
+    const controller = new AbortController();
+    const timeout = setTimeout(()=> controller.abort(), 10000);
+    return fetch(proxy + encodeURIComponent(target), {signal: controller.signal})
+      .then(r=>{
+        clearTimeout(timeout);
+        if(!r.ok) throw new Error('fetch failed');
+        return r.text();
+      })
+      .then(html=>{
+        const tracks = scrapePlaylistTracksFromHtml(html);
+        if(tracks.length>0) return tracks;
+        // If no /track/ found, maybe the page is dynamically loaded - try to find URI-like strings
+        const alt = Array.from(new Set((html.match(/spotify:track:[A-Za-z0-9]+/g) || []).map(s=>s.split(':').pop())));
+        return alt;
+      });
+  }
+
+  // Initialize: fallback to saved manual, else try auto fetch, else show fallback UI
+  function init(){
+    const savedManual = localStorage.getItem('manualTracks_'+playlistId);
+    if(savedManual){
+      try {
+        const arr = JSON.parse(savedManual);
+        if(Array.isArray(arr) && arr.length>0){
+          renderSongOfTheDay(arr);
+          return;
+        }
+      } catch(e){}
+    }
+
+    tryAutoFetchTracks()
+    .then(tracks=>{
+      if(tracks && tracks.length>0){
+        // store a small cache in localStorage
+        try { localStorage.setItem('autoTracks_'+playlistId, JSON.stringify(tracks.slice(0,800))); } catch(e){}
+        renderSongOfTheDay(tracks);
+      } else {
+        // no tracks found
+        sotdStatus.textContent = "Couldn't auto-load tracks from Spotify. You can paste them manually below.";
+        fallbackEl.style.display = 'block';
+      }
+    })
+    .catch(err=>{
+      // network/CORS proxies blocked or slow
+      const cached = localStorage.getItem('autoTracks_'+playlistId);
+      if(cached){
+        try {
+          const arr = JSON.parse(cached);
+          if(Array.isArray(arr) && arr.length>0){
+            sotdStatus.textContent = "Using cached playlist tracks.";
+            renderSongOfTheDay(arr);
+            return;
+          }
+        } catch(e){}
+      }
+      sotdStatus.textContent = "Auto-load unavailable. Please paste playlist tracks below (one per line).";
+      fallbackEl.style.display = 'block';
+    });
+  }
+
+  // allow manual paste to prefill textarea from saved manual
+  (function populateManual(){
+    const saved = localStorage.getItem('manualTracks_'+playlistId);
+    if(saved){
+      try {
+        const arr = JSON.parse(saved);
+        manualTextarea.value = arr.map(id=>'https://open.spotify.com/track/'+id).join("\n");
+        manualSavedMsg.textContent = `Using saved ${arr.length} tracks.`;
+        setTimeout(()=> manualSavedMsg.textContent = "", 2400);
+      } catch(e){}
+    }
+  })();
+
+  // start
+  init();
+
+})();
 </script>
 </body>
 </html>
+
 
 
