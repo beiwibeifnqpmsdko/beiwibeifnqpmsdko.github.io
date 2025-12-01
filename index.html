@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Happy Birthday Mom 💖 & Celebrations</title>
+<title>Happy Birthday Mom 💖</title>
 <link rel="icon" href="data:,">
 <style>
   :root{
@@ -69,8 +69,17 @@
   .card h2 { margin:0 0 8px 0; font-size:1.1rem; color:var(--accent) }
   .card p { margin:0; color:var(--muted) }
 
-  /* countdowns */
-  .countdown-item { font-size:1.3rem; margin:6px 0; font-weight:600; text-align:center; }
+  /* birthday */
+  #countdown {
+    font-size:1.6rem;
+    text-align:center;
+    margin-top:6px;
+    font-weight:600;
+  }
+  .small {
+    font-size:0.9rem;
+    color:var(--muted);
+  }
 
   /* spotify area */
   .spotify-embed {
@@ -165,21 +174,15 @@
 <div class="page">
   <header>
     <div class="typing">Happy Birthday Mom! ❤️</div>
-    <div class="muted" style="margin-top:10px">A little page I made — feel free to ask for adjustments.</div>
+    <div class="small" style="margin-top:10px">A little page I made — feel free to ask for adjustments.</div>
   </header>
 
   <main class="grid">
-
-    <!-- CARD: Multiple Countdowns -->
-    <section class="card" id="card-countdowns" aria-label="upcoming celebrations countdowns">
-      <h2>Countdowns</h2>
-      <div id="countdowns">
-        <div class="countdown-item" id="countdown-birthday">Birthday: —</div>
-        <div class="countdown-item" id="countdown-christmas">Christmas: —</div>
-        <div class="countdown-item" id="countdown-easter">Easter: —</div>
-        <div class="countdown-item" id="countdown-halloween">Halloween: —</div>
-      </div>
-      <p class="muted small">Countdowns update live. Dates are editable in the code if needed.</p>
+    <!-- CARD: Countdown -->
+    <section class="card" id="card-countdown" aria-label="birthday countdown">
+      <h2>Birthday Countdown</h2>
+      <div id="countdown" aria-live="polite">—</div>
+      <p class="small" style="margin-top:8px">Countdown updates every second. Birthday is set to <strong>3 December</strong> (you can change the date in the code).</p>
     </section>
 
     <!-- CARD: Spotify + Song of the Day -->
@@ -254,6 +257,7 @@
 
 <!-- floating hearts -->
 <script>
+  // Generate floating hearts
   (function spawnHearts(){
     const N = 18;
     for(let i=0;i<N;i++){
@@ -268,82 +272,75 @@
       const dur = 8 + Math.random()*10;
       h.style.transition = `transform ${dur}s linear, opacity ${dur}s linear`;
       document.body.appendChild(h);
+      // animate
       requestAnimationFrame(()=> {
         h.style.transform = `translateY(-120vh) rotate(45deg)`;
         h.style.opacity = 0;
       });
+      // remove after animation
       setTimeout(()=> h.remove(), (dur+0.5)*1000);
-      setTimeout(()=> { if(i===N-1) spawnHearts(); }, 1200*i);
+      // spawn next little later
+      setTimeout(()=> {
+        if(i===N-1) spawnHearts(); // keep gentle looping
+      }, 1200*i);
     }
   })();
 </script>
 
 <script>
 /* ------------------------------
-   MULTIPLE COUNTDOWNS
+   BIRTHDAY COUNTDOWN
+   Edit birthdayDateStr if you want to change the birthday.
+   Format: "YYYY-MM-DD" or "MM-DD" (keeps  current year)
    ------------------------------ */
 (function(){
-  const countdowns = [
-    {id:'countdown-birthday', name:'Birthday', dateStr:'12-03'},
-    {id:'countdown-christmas', name:'Christmas', dateStr:'12-25'},
-    {id:'countdown-easter', name:'Easter', dateFunc: computeEaster },
-    {id:'countdown-halloween', name:'Halloween', dateStr:'10-31'}
-  ];
+  const birthdayDateStr = "12-03"; // month-day (3 Dec) — change here if needed
+  const countdownEl = document.getElementById('countdown');
 
-  function computeEaster(year){
-    // Meeus/Jones algorithm
-    const f = Math.floor,
-      G = year % 19,
-      C = f(year/100),
-      H = (C - f(C/4) - f((8*C+13)/25) + 19*G +15)%30,
-      I = H - f(H/28)*(1 - f(29/(H+1))*f((21-G)/11)),
-      J = (year + f(year/4) + I + 2 - C + f(C/4))%7,
-      L = I - J,
-      month = 3 + f((L+40)/44),
-      day = L + 28 - 31*f(month/4);
-    return new Date(year, month-1, day);
+  function computeNextBirthday() {
+    const now = new Date();
+    const parts = birthdayDateStr.split('-');
+    let month, day, year;
+    if (parts.length === 2) {
+      month = parseInt(parts[0],10); day = parseInt(parts[1],10); year = now.getFullYear();
+    } else {
+      year = parseInt(parts[0],10); month = parseInt(parts[1],10); day = parseInt(parts[2],10);
+    }
+    // Note: JS months are 0-based
+    let b = new Date(year, month-1, day, 0,0,0);
+    if (now > b) b = new Date(year+1, month-1, day,0,0,0);
+    return b;
   }
 
-  function computeNextDate(item){
+  function update() {
     const now = new Date();
-    let target;
-    if(item.dateFunc) target = item.dateFunc(now.getFullYear());
-    else {
-      const parts = item.dateStr.split('-');
-      target = new Date(now.getFullYear(), parseInt(parts[0])-1, parseInt(parts[1]));
+    const target = computeNextBirthday();
+    const diff = Math.max(0, target - now);
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+    if (diff <= 1000*60*60*24 && days===0) {
+      countdownEl.textContent = "🎉 HAPPY BIRTHDAY! 🎉";
+    } else {
+      countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
     }
-    if(now>target) {
-      if(item.dateFunc) target = item.dateFunc(now.getFullYear()+1);
-      else target.setFullYear(target.getFullYear()+1);
-    }
-    return target;
-  }
-
-  function update(){
-    const now = new Date();
-    countdowns.forEach(c=>{
-      const target = computeNextDate(c);
-      const diff = Math.max(0, target-now);
-      const days = Math.floor(diff / (1000*60*60*24));
-      const hours = Math.floor((diff / (1000*60*60)) %24);
-      const mins = Math.floor((diff/ (1000*60))%60);
-      const secs = Math.floor((diff/1000)%60);
-      const el = document.getElementById(c.id);
-      if(diff<1000*60*60*24 && days===0) el.textContent=`🎉 ${c.name}! 🎉`;
-      else el.textContent = `${c.name}: ${days}d ${hours}h ${mins}m ${secs}s`;
-    });
   }
   update();
-  setInterval(update,1000);
+  setInterval(update, 1000);
 })();
 
 /* ------------------------------
-   SONG OF THE DAY CODE
-   (same as before, works with daily random from playlist)
+   SONG OF THE DAY (random per day)
+   Strategy:
+   1) Try to scrape the public playlist page HTML via a CORS-relay (AllOrigins). This often works without API keys.
+   2) Parse track links (/track/{id}) from the HTML.
+   3) If that fails, show a friendly fallback where you can paste track URLs or IDs once (stored in localStorage).
+   4) Choose a "random" track for the day by seeding with the current date so it's stable across refreshes that day.
    ------------------------------ */
 
 (function(){
-  const playlistId = "0F8yGT3rAJjinOwDGd6PVu"; 
+  const playlistId = "0F8yGT3rAJjinOwDGd6PVu"; // confirmed playlist
   const playlistUrl = `https://open.spotify.com/playlist/${playlistId}`;
   const sotdStatus = document.getElementById('sotd-status');
   const sotdBox = document.getElementById('sotd');
@@ -357,60 +354,228 @@
   const clearManualBtn = document.getElementById('clearManual');
   const manualSavedMsg = document.getElementById('manualSavedMsg');
 
+  // util: extract track ids from a string (ids or full urls)
   function extractTrackIds(text) {
     if(!text) return [];
     const ids = new Set();
+    // match full urls
     const urlRegex = /open\.spotify\.com\/track\/([A-Za-z0-9]+)|spotify:track:([A-Za-z0-9]+)/g;
     let m;
-    while((m = urlRegex.exec(text)) !== null){ ids.add(m[1]||m[2]); }
-    text.split(/\s+/).forEach(tok=>{ const clean=tok.trim(); if(/^[A-Za-z0-9]{8,32}$/.test(clean)) ids.add(clean); });
+    while((m = urlRegex.exec(text)) !== null) {
+      ids.add(m[1] || m[2]);
+    }
+    // also split by lines and try to accept bare ids
+    text.split(/\s+/).forEach(tok=>{
+      const clean = tok.trim();
+      if(/^[A-Za-z0-9]{8,32}$/.test(clean)) ids.add(clean);
+    });
     return Array.from(ids);
   }
 
+  // Save manual list
   saveManualBtn.addEventListener('click', ()=>{
     const ids = extractTrackIds(manualTextarea.value);
-    if(ids.length===0){ manualSavedMsg.textContent="No track URLs/IDs found."; return;}
+    if(ids.length===0){
+      manualSavedMsg.textContent = "No track URLs/IDs found — paste lines like https://open.spotify.com/track/XXXXXXXX";
+      return;
+    }
     localStorage.setItem('manualTracks_'+playlistId, JSON.stringify(ids));
-    manualSavedMsg.textContent=`Saved ${ids.length} tracks.`;
-    setTimeout(()=> manualSavedMsg.textContent="",3500);
+    manualSavedMsg.textContent = `Saved ${ids.length} tracks. The Song of the Day will use these.`;
+    setTimeout(()=> manualSavedMsg.textContent = "", 3500);
     renderSongOfTheDay(ids);
   });
+
+  // Clear manual
   clearManualBtn.addEventListener('click', ()=>{
     localStorage.removeItem('manualTracks_'+playlistId);
-    manualTextarea.value="";
-    manualSavedMsg.textContent="Cleared saved tracks.";
-    setTimeout(()=> manualSavedMsg.textContent="",2500);
+    manualTextarea.value = "";
+    manualSavedMsg.textContent = "Cleared saved tracks.";
+    setTimeout(()=> manualSavedMsg.textContent = "", 2500);
+    // try to auto fetch again
     init();
   });
 
-  function hashStringToInt(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h+= (h<<1)+(h<<4)+(h<<7)+(h<<8)+(h<<24);}return Math.abs(h>>>0);}
-  function seededPick(list,seedStr){if(!list||list.length===0) return null; const h=hashStringToInt(seedStr); return {id:list[h%list.length],index:h%list.length};}
+  // Seeded random: hash a string to number
+  function hashStringToInt(s){
+    let h=2166136261;
+    for(let i=0;i<s.length;i++){
+      h ^= s.charCodeAt(i);
+      h += (h<<1) + (h<<4) + (h<<7) + (h<<8) + (h<<24);
+    }
+    return Math.abs(h >>> 0);
+  }
+  function seededPick(list, seedStr){
+    if(!list || list.length===0) return null;
+    const h = hashStringToInt(seedStr);
+    const idx = h % list.length;
+    return {id: list[idx], index: idx};
+  }
 
+  // render the chosen track (id or null)
   function renderSongOfTheDay(trackIds){
-    if(!trackIds||trackIds.length===0){ sotdStatus.textContent="No tracks available yet."; fallbackEl.style.display='block'; return;}
-    fallbackEl.style.display='none';
-    const today = new Date().toISOString().slice(0,10);
-    const seed = playlistId+'|'+today;
-    const chosen = seededPick(trackIds,seed);
-    if(!chosen){ sotdStatus.textContent="Couldn't pick a track."; return;}
+    if(!trackIds || trackIds.length===0) {
+      sotdStatus.textContent = "No tracks available yet.";
+      fallbackEl.style.display = 'block';
+      return;
+    }
+    fallbackEl.style.display = 'none';
+    const today = new Date().toISOString().slice(0,10); // YYYY-MM-DD
+    const seed = playlistId + '|' + today;
+    const chosen = seededPick(trackIds, seed);
+    if(!chosen) {
+      sotdStatus.textContent = "Couldn't pick a track.";
+      return;
+    }
     const tid = chosen.id;
-    sotdStatus.style.display='none'; sotdBox.style.display='block';
-    sotdTitle.textContent = `Track ID: ${tid}`;
-    sotdArtist.textContent = `🎵 Play below or open in Spotify`;
-    sotdPlayer.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${tid}" width="300" height="80" frameborder="0" allow="encrypted-media"></iframe>`;
+    sotdStatus.style.display = 'none';
+    sotdBox.style.display = 'block';
+
+    // Embed small track player
+    const embedHtml = `<iframe src="https://open.spotify.com/embed/track/${tid}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="border-radius:8px;"></iframe>`;
+    sotdPlayer.innerHTML = embedHtml;
     sotdOpen.href = `https://open.spotify.com/track/${tid}`;
+    sotdOpen.textContent = "Open in Spotify";
+
+    // We will try to fetch the track title shown on the public playlist page if we have scraped it, otherwise show ID
+    // See if cached metadata exists
+    const metaKey = 'sotd_meta_'+tid;
+    const metaJSON = localStorage.getItem(metaKey);
+    if(metaJSON){
+      try {
+        const meta = JSON.parse(metaJSON);
+        sotdTitle.textContent = meta.title || `Song ${tid}`;
+        sotdArtist.textContent = meta.artist || "";
+        return;
+      } catch(e){}
+    }
+    // fallback: display tid while we optionally try to fetch metadata via AllOrigins for the track page
+    sotdTitle.textContent = "Song ID: " + tid;
+    sotdArtist.textContent = "";
+
+    // attempt to fetch the track page to get title/artist (may be blocked by CORS)
+    const prox = 'https://api.allorigins.win/raw?url=';
+    fetch(prox + encodeURIComponent('https://open.spotify.com/track/' + tid))
+    .then(r => r.text())
+    .then(html=>{
+      // try to extract <title>Artist – Song Name - Spotify</title>
+      const titleMatch = html.match(/<title[^>]*>([^<]+)/i);
+      if(titleMatch && titleMatch[1]){
+        // title often like "Artist – Track Name - Spotify"
+        const t = titleMatch[1].replace(/\s*-*\s*Spotify.*$/i,'').trim();
+        // try to split by " – " or " - "
+        let artist = "", track = t;
+        if(t.indexOf('–')!==-1){
+          const parts = t.split('–').map(s=>s.trim());
+          artist = parts[0];
+          track = parts.slice(1).join(' – ');
+        } else if(t.indexOf('-')!==-1){
+          const parts = t.split('-').map(s=>s.trim());
+          artist = parts[0];
+          track = parts.slice(1).join(' - ');
+        }
+        sotdTitle.textContent = track || t;
+        sotdArtist.textContent = artist || "";
+        // cache metadata briefly
+        try { localStorage.setItem(metaKey, JSON.stringify({title:track, artist:artist})); } catch(e){}
+      }
+    }).catch(()=>{/* ignore metadata fetch errors */});
   }
 
-  function init(){
-    const saved = localStorage.getItem('manualTracks_'+playlistId);
-    if(saved){ renderSongOfTheDay(JSON.parse(saved)); }
-    else{ renderSongOfTheDay([]); fallbackEl.style.display='block'; }
+  // Try to scrape playlist page for /track/{id} links
+  function scrapePlaylistTracksFromHtml(html){
+    const ids = new Set();
+    // find /track/ID occurrences
+    const re = /\/track\/([A-Za-z0-9]{8,64})/g;
+    let m;
+    while((m = re.exec(html)) !== null){
+      ids.add(m[1]);
+    }
+    return Array.from(ids);
   }
+
+  // Try to fetch playlist HTML via AllOrigins (a free CORS proxy). This may fail sometimes.
+  function tryAutoFetchTracks(){
+    sotdStatus.textContent = "Trying to load playlist tracks automatically…";
+    const proxy = 'https://api.allorigins.win/raw?url=';
+    const target = playlistUrl;
+    // a promise that times out if slow
+    const controller = new AbortController();
+    const timeout = setTimeout(()=> controller.abort(), 10000);
+    return fetch(proxy + encodeURIComponent(target), {signal: controller.signal})
+      .then(r=>{
+        clearTimeout(timeout);
+        if(!r.ok) throw new Error('fetch failed');
+        return r.text();
+      })
+      .then(html=>{
+        const tracks = scrapePlaylistTracksFromHtml(html);
+        if(tracks.length>0) return tracks;
+        // If no /track/ found, maybe the page is dynamically loaded - try to find URI-like strings
+        const alt = Array.from(new Set((html.match(/spotify:track:[A-Za-z0-9]+/g) || []).map(s=>s.split(':').pop())));
+        return alt;
+      });
+  }
+
+  // Initialize: fallback to saved manual, else try auto fetch, else show fallback UI
+  function init(){
+    const savedManual = localStorage.getItem('manualTracks_'+playlistId);
+    if(savedManual){
+      try {
+        const arr = JSON.parse(savedManual);
+        if(Array.isArray(arr) && arr.length>0){
+          renderSongOfTheDay(arr);
+          return;
+        }
+      } catch(e){}
+    }
+
+    tryAutoFetchTracks()
+    .then(tracks=>{
+      if(tracks && tracks.length>0){
+        // store a small cache in localStorage
+        try { localStorage.setItem('autoTracks_'+playlistId, JSON.stringify(tracks.slice(0,800))); } catch(e){}
+        renderSongOfTheDay(tracks);
+      } else {
+        // no tracks found
+        sotdStatus.textContent = "Couldn't auto-load tracks from Spotify. You can paste them manually below.";
+        fallbackEl.style.display = 'block';
+      }
+    })
+    .catch(err=>{
+      // network/CORS proxies blocked or slow
+      const cached = localStorage.getItem('autoTracks_'+playlistId);
+      if(cached){
+        try {
+          const arr = JSON.parse(cached);
+          if(Array.isArray(arr) && arr.length>0){
+            sotdStatus.textContent = "Using cached playlist tracks.";
+            renderSongOfTheDay(arr);
+            return;
+          }
+        } catch(e){}
+      }
+      sotdStatus.textContent = "Auto-load unavailable. Please paste playlist tracks below (one per line).";
+      fallbackEl.style.display = 'block';
+    });
+  }
+
+  // allow manual paste to prefill textarea from saved manual
+  (function populateManual(){
+    const saved = localStorage.getItem('manualTracks_'+playlistId);
+    if(saved){
+      try {
+        const arr = JSON.parse(saved);
+        manualTextarea.value = arr.map(id=>'https://open.spotify.com/track/'+id).join("\n");
+        manualSavedMsg.textContent = `Using saved ${arr.length} tracks.`;
+        setTimeout(()=> manualSavedMsg.textContent = "", 2400);
+      } catch(e){}
+    }
+  })();
+
+  // start
   init();
+
 })();
 </script>
-
-
-
-
-
+</body>
+</html>
