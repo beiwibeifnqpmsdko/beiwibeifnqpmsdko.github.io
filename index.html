@@ -1,11 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Happy Birthday Mom</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Mom</title>
+<style>
+    /* --- Basic Warm Family Theme --- */
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to bottom, #FFE5D9, #FFD6BA);
+        color: #5C3A21;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    h1, h2, h3 {
+        text-align: center;
+    }
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    /* --- Typing Text --- */
+    .typing {
+        border-right: .1em solid #5C3A21;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 0;
+        animation: typing 3s steps(40, end) forwards;
+        font-size: 2em;
+        margin-bottom: 30px;
+    }
+    @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+    }
+    /* --- Timeline --- */
+    .timeline {
+        position: relative;
+        margin: 50px 0;
+        padding-left: 20px;
+        border-left: 2px solid #5C3A21;
+    }
+    .event {
+        margin: 20px 0;
+        position: relative;
+    }
+    .event::before {
+        content: '';
+        position: absolute;
+        left: -9px;
+        top: 0;
+        width: 16px;
+        height: 16px;
+        background: #FFB788;
+        border-radius: 50%;
+    }
+    /* --- Floating Hearts --- */
+    .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: pink;
+        transform: rotate(45deg);
+        animation: floatUp linear infinite;
+    }
+    .heart::before, .heart::after {
+        content: "";
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: pink;
+        border-radius: 50%;
+    }
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+    @keyframes floatUp {
+        0% { transform: translateY(0) rotate(45deg); opacity: 1; }
+        100% { transform: translateY(-800px) rotate(45deg); opacity: 0; }
+    }
+    /* --- Countdown --- */
+    #countdown {
+        text-align: center;
+        font-size: 2em;
+        margin: 40px 0;
+    }
+    /* --- Spotify Playlist --- */
+    #spotify {
+        text-align: center;
+        margin: 30px 0;
+    }
+</style>
 </head>
 <body>
-    <h1>Hello Mom ❤️</h1>
-    <p>This is your surprise birthday website!</p>
+<div class="container">
+    <h1 class="typing">Happy Birthday Mom! ❤️</h1>
+
+    <!-- Countdown -->
+    <div id="countdown"></div>
+
+    <!-- Spotify Playlist -->
+    <div id="spotify">
+        <h2>Listen to your playlist:</h2>
+        <iframe 
+            src="https://open.spotify.com/embed/playlist/0F8yGT3rAJjinOwDGd6PVu?si=TAjd3nArQeOtBk1Zh00Dlg" 
+            width="300" 
+            height="380" 
+            frameborder="0" 
+            allowtransparency="true" 
+            allow="encrypted-media">
+        </iframe>
+    </div>
+
+    <!-- Timeline of Memories -->
+    <div class="timeline">
+        <h2>Our Memories</h2>
+        <div class="event">
+            <h3>Childhood</h3>
+            <p>Funny moments and laughter from when I was little.</p>
+        </div>
+        <div class="event">
+            <h3>Recent Times</h3>
+            <p>Special trips, celebrations, and memories together.</p>
+        </div>
+        <!-- Add more events here -->
+    </div>
+</div>
+
+<script>
+    /* --- Floating Hearts --- */
+    const numHearts = 20;
+    for (let i = 0; i < numHearts; i++) {
+        let heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+        heart.style.width = 15 + Math.random() * 15 + 'px';
+        heart.style.height = heart.style.width;
+        document.body.appendChild(heart);
+    }
+
+    /* --- Countdown --- */
+    function updateCountdown() {
+        const now = new Date();
+        const year = now.getFullYear();
+        let birthday = new Date(`${year}-12-03T00:00:00`); // Replace MM-DD with her birthday
+        if (now > birthday) birthday.setFullYear(year + 1);
+        const diff = birthday - now;
+
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff / (1000*60*60)) % 24);
+        const minutes = Math.floor((diff / (1000*60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        const countdownEl = document.getElementById('countdown');
+        if (diff < 1000*60*60*24) {
+            countdownEl.innerHTML = "🎉 HAPPY BIRTHDAY! 🎉";
+        } else {
+            countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+</script>
 </body>
 </html>
+
+
