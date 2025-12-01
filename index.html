@@ -1,267 +1,415 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday Mom</title>
-
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Happy Birthday Mom 💖 & Celebrations</title>
+<link rel="icon" href="data:,">
 <style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(to bottom, #FFE5D9, #FFD6BA);
-        color: #5C3A21;
-        margin: 0;
-        padding: 0;
-        overflow-x: hidden;
-    }
+  :root{
+    --bg1: #FFE5D9;
+    --bg2: #FFD6BA;
+    --accent: #5C3A21;
+    --card: #fff7f3;
+    --muted: #7a5a47;
+    --glass: rgba(255,255,255,0.7);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Roboto, system-ui, Arial;
+    background: linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:var(--accent);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  .page {
+    max-width:1000px;
+    margin:28px auto;
+    padding:20px;
+  }
 
-    h1, h2 {
-        text-align: center;
-    }
+  header {
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .typing {
+    display:inline-block;
+    font-size:2rem;
+    font-weight:700;
+    border-right:2px solid var(--accent);
+    white-space:nowrap;
+    overflow:hidden;
+    width:0;
+    animation: typing 3s steps(30,end) forwards;
+    background:linear-gradient(90deg, rgba(255,255,255,0.0), rgba(255,255,255,0.25));
+    padding:8px 16px;
+    border-radius:12px;
+    box-shadow: 0 6px 20px rgba(92,58,33,0.07);
+    color:var(--accent);
+  }
+  @keyframes typing { from { width:0 } to { width:18ch } }
 
-    .typing {
-        border-right: .1em solid #5C3A21;
-        white-space: nowrap;
-        overflow: hidden;
-        width: 0;
-        animation: typing 3s steps(40, end) forwards;
-        font-size: 2em;
-        margin: 30px auto;
-        display: block;
-        text-align: center;
-    }
+  /* grid of cards */
+  .grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+    align-items:start;
+  }
 
-    @keyframes typing {
-        from { width: 0; }
-        to { width: 100%; }
-    }
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.96));
+    border-radius:18px;
+    padding:18px;
+    box-shadow: 0 8px 30px rgba(92,58,33,0.08);
+    position:relative;
+    overflow:hidden;
+  }
+  .card h2 { margin:0 0 8px 0; font-size:1.1rem; color:var(--accent) }
+  .card p { margin:0; color:var(--muted) }
 
-    .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-    }
+  /* countdowns */
+  .countdown-item { font-size:1.3rem; margin:6px 0; font-weight:600; text-align:center; }
 
-    /* Section cards */
-    .card {
-        background: #FFF5EF;
-        padding: 25px;
-        margin: 25px 0;
-        border-radius: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        animation: fadeIn 1s ease;
-    }
+  /* spotify area */
+  .spotify-embed {
+    display:flex;
+    gap:12px;
+    flex-direction:column;
+    align-items:center;
+  }
+  .trackbox {
+    width:100%;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+  }
+  .track-info {
+    text-align:center;
+  }
+  .play-embed {
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow: 0 6px 18px rgba(92,58,33,0.06);
+  }
+  .muted {
+    color:var(--muted);
+    font-size:0.95rem;
+  }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+  /* timeline */
+  .timeline { padding-left:12px; border-left:3px dashed rgba(92,58,33,0.06); }
+  .event { margin:14px 0; padding-left:10px; position:relative; }
+  .event h3 { margin:0 0 6px 0; font-size:1rem; }
+  .event::before {
+    content:"";
+    position:absolute;
+    left:-21px;
+    top:6px;
+    width:14px; height:14px;
+    background: #FFB788;
+    border-radius:50%;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  }
 
-    /* Countdown text */
-    .count {
-        font-size: 1.8em;
-        text-align: center;
-        margin-top: 10px;
-        font-weight: bold;
-    }
+  /* hearts */
+  .heart {
+    position:fixed;
+    pointer-events:none;
+    width:18px; height:18px;
+    transform:rotate(45deg);
+    z-index:0;
+  }
+  .heart:before, .heart:after {
+    content:""; position:absolute; width:18px; height:18px; background:pink; border-radius:50%;
+  }
+  .heart:before { left:0; top:-9px }
+  .heart:after { left:9px; top:0 }
 
-    /* Song of the day */
-    .song-box {
-        text-align: center;
-        padding: 15px;
-        background: #FFEDE3;
-        border-radius: 15px;
-        margin-top: 15px;
-        font-size: 1.2em;
-    }
+  /* controls */
+  .controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:8px }
+  .btn {
+    background:var(--accent);
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow: 0 6px 16px rgba(92,58,33,0.12);
+  }
+  .btn.secondary {
+    background:transparent;
+    color:var(--accent);
+    border:1px solid rgba(92,58,33,0.08);
+    box-shadow:none;
+  }
 
-    /* Floating hearts */
-    .heart {
-        position: absolute;
-        background: pink;
-        transform: rotate(45deg);
-        animation: floatUp linear infinite;
-        width: 20px;
-        height: 20px;
-    }
-    .heart::before, .heart::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 20px;
-        background: pink;
-        border-radius: 50%;
-    }
-    .heart::before { top: -10px; left: 0; }
-    .heart::after { left: 10px; top: 0; }
+  label{display:block; font-size:0.9rem; margin:8px 0 6px 0}
+  textarea, input[type="text"]{
+    width:100%; padding:8px; border-radius:10px; border:1px solid rgba(92,58,33,0.08);
+    font-family:inherit; font-size:0.95rem; resize:vertical;
+  }
 
-    @keyframes floatUp {
-        0% { transform: translateY(0) rotate(45deg); opacity: 1; }
-        100% { transform: translateY(-800px) rotate(45deg); opacity: 0; }
-    }
+  footer{ margin-top:22px; text-align:center; color:var(--muted); font-size:0.9rem }
 
-    /* Timeline */
-    .timeline {
-        border-left: 2px solid #5C3A21;
-        padding-left: 20px;
-    }
-    .event {
-        margin: 20px 0;
-        position: relative;
-    }
-    .event::before {
-        content: '';
-        position: absolute;
-        left: -9px;
-        top: 0;
-        width: 16px;
-        height: 16px;
-        background: #FFB788;
-        border-radius: 50%;
-    }
-
+  @media (max-width:420px){
+    .typing { font-size:1.4rem; animation-duration:2.4s; }
+  }
 </style>
 </head>
 <body>
+<div class="page">
+  <header>
+    <div class="typing">Happy Birthday Mom! ❤️</div>
+    <div class="muted" style="margin-top:10px">A little page I made — feel free to ask for adjustments.</div>
+  </header>
 
-<div class="container">
+  <main class="grid">
 
-    <h1 class="typing">Happy Birthday Mom! ❤️</h1>
+    <!-- CARD: Multiple Countdowns -->
+    <section class="card" id="card-countdowns" aria-label="upcoming celebrations countdowns">
+      <h2>Countdowns</h2>
+      <div id="countdowns">
+        <div class="countdown-item" id="countdown-birthday">Birthday: —</div>
+        <div class="countdown-item" id="countdown-christmas">Christmas: —</div>
+        <div class="countdown-item" id="countdown-easter">Easter: —</div>
+        <div class="countdown-item" id="countdown-halloween">Halloween: —</div>
+      </div>
+      <p class="muted small">Countdowns update live. Dates are editable in the code if needed.</p>
+    </section>
 
-    <!-- Birthday Countdown -->
-    <div class="card">
-        <h2>🎂 Countdown to Your Birthday</h2>
-        <div id="birthdayCount" class="count"></div>
-    </div>
+    <!-- CARD: Spotify + Song of the Day -->
+    <section class="card" id="card-spotify" aria-label="spotify playlist and song of the day">
+      <h2>Music & Song of the Day</h2>
 
-    <!-- Christmas Countdown -->
-    <div class="card">
-        <h2>🎄 Countdown to Christmas</h2>
-        <div id="christmasCount" class="count"></div>
-    </div>
-
-    <!-- Easter Countdown -->
-    <div class="card">
-        <h2>🐣 Countdown to Easter</h2>
-        <div id="easterCount" class="count"></div>
-    </div>
-
-    <!-- Halloween Countdown -->
-    <div class="card">
-        <h2>🎃 Countdown to Halloween</h2>
-        <div id="halloweenCount" class="count"></div>
-    </div>
-
-    <!-- Playlist + Song of the Day -->
-    <div class="card">
-        <h2>🎵 Your Playlist & Song of the Day</h2>
-
-        <iframe 
-            src="https://open.spotify.com/embed/playlist/0F8yGT3rAJjinOwDGd6PVu" 
-            width="100%" 
-            height="380" 
-            frameborder="0" 
-            allowtransparency="true" 
-            allow="encrypted-media">
-        </iframe>
-
-        <div id="songOfDay" class="song-box">Loading song of the day...</div>
-    </div>
-
-    <!-- Memories -->
-    <div class="card">
-        <h2>💛 Our Memories</h2>
-        <div class="timeline">
-            <div class="event">
-                <h3>Childhood</h3>
-                <p>Funny moments and laughter from when I was little.</p>
-            </div>
-            <div class="event">
-                <h3>Recent Times</h3>
-                <p>Special trips, celebrations, and memories together.</p>
-            </div>
+      <div class="spotify-embed">
+        <!-- playlist embed -->
+        <div id="playlist-embed">
+          <p class="muted">Playlist:</p>
+          <iframe id="playlistIframe"
+            src="https://open.spotify.com/embed/playlist/0F8yGT3rAJjinOwDGd6PVu"
+            width="300" height="380" frameborder="0" allow="encrypted-media" style="border-radius:12px;">
+          </iframe>
         </div>
-    </div>
 
+        <!-- song of the day -->
+        <div class="trackbox" style="width:100%;max-width:420px">
+          <div id="sotd-status" class="muted">Selecting today's song…</div>
+          <div id="sotd" style="display:none; width:100%;">
+            <div class="track-info">
+              <div id="sotd-title" style="font-weight:700"></div>
+              <div id="sotd-artist" class="muted" style="margin-top:6px"></div>
+            </div>
+            <div id="sotd-player" class="play-embed" style="margin-top:10px"></div>
+            <div style="margin-top:8px; text-align:center;">
+              <a id="sotd-open" target="_blank" rel="noopener" class="small">Open in Spotify</a>
+            </div>
+          </div>
+
+          <!-- fallback / manual input -->
+          <div id="sotd-fallback" style="margin-top:12px; display:none; width:100%;">
+            <div class="muted">Automatic fetch couldn't get tracks (Spotify CORS/changes). Easy fallback:</div>
+            <label for="manualTracks">Paste playlist track URLs (one per line) or track IDs:</label>
+            <textarea id="manualTracks" rows="4" placeholder="https://open.spotify.com/track/XXXXXXXXX"></textarea>
+            <div class="controls" style="justify-content:flex-end;">
+              <button class="btn" id="saveManual">Save tracks</button>
+              <button class="btn secondary" id="clearManual">Clear</button>
+            </div>
+            <div id="manualSavedMsg" class="muted" style="margin-top:8px;"></div>
+          </div>
+
+          <div style="margin-top:10px" class="muted small">Tip: If automatic works, you don't need to paste anything. If not, paste the list once and the page will use it from your browser storage.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD: Timeline -->
+    <section class="card" id="card-timeline" aria-label="timeline of memories">
+      <h2>Our Memories</h2>
+      <div class="timeline">
+        <div class="event">
+          <h3>Childhood</h3>
+          <p>Funny moments and laughter from when I was little.</p>
+        </div>
+        <div class="event">
+          <h3>Recent Times</h3>
+          <p>Special trips, celebrations, and memories together.</p>
+        </div>
+        <div class="event">
+          <h3>More to come</h3>
+          <p>I'll add more memories here — or you can send some to include!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Made with 💖 — open the file on GitHub Pages or locally. If something looks off, tell me what you want changed.
+  </footer>
 </div>
 
+<!-- floating hearts -->
 <script>
-/* Floating hearts */
-for (let i = 0; i < 20; i++) {
-    let heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.style.left = Math.random() * window.innerWidth + 'px';
-    heart.style.animationDuration = 5 + Math.random() * 5 + 's';
-    heart.style.width = 15 + Math.random() * 15 + 'px';
-    heart.style.height = heart.style.width;
-    document.body.appendChild(heart);
-}
-
-/* Reusable countdown function */
-function setupCountdown(elementId, targetDateString) {
-    function update() {
-        const now = new Date();
-        let target = new Date(targetDateString);
-
-        // If date passed, move to next year
-        if (now > target) target.setFullYear(target.getFullYear() + 1);
-
-        const diff = target - now;
-        const days = Math.floor(diff / (1000*60*60*24));
-        const hours = Math.floor((diff / (1000*60*60)) % 24);
-        const minutes = Math.floor((diff / (1000*60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        document.getElementById(elementId).innerHTML =
-            `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  (function spawnHearts(){
+    const N = 18;
+    for(let i=0;i<N;i++){
+      const h = document.createElement('div');
+      h.className='heart';
+      const size = 10 + Math.random()*18;
+      h.style.width = size+'px';
+      h.style.height = size+'px';
+      h.style.left = (Math.random()*100)+'vw';
+      h.style.top = (60 + Math.random()*35)+'vh';
+      h.style.opacity = 0.7 - Math.random()*0.5;
+      const dur = 8 + Math.random()*10;
+      h.style.transition = `transform ${dur}s linear, opacity ${dur}s linear`;
+      document.body.appendChild(h);
+      requestAnimationFrame(()=> {
+        h.style.transform = `translateY(-120vh) rotate(45deg)`;
+        h.style.opacity = 0;
+      });
+      setTimeout(()=> h.remove(), (dur+0.5)*1000);
+      setTimeout(()=> { if(i===N-1) spawnHearts(); }, 1200*i);
     }
-
-    update();
-    setInterval(update, 1000);
-}
-
-/* Apply countdowns */
-setupCountdown("birthdayCount", "2025-12-03");
-setupCountdown("christmasCount", "2025-12-25");
-setupCountdown("easterCount", "2025-04-20");   // You can change the Easter date yearly
-setupCountdown("halloweenCount", "2025-10-31");
-
-/* Song of the Day (random but changes daily) */
-const playlistSongs = [
-    "7ouMYWpwJ422jRcDASZB7P",
-    "2takcwOaAZWiXQijPHIx7B",
-    "0eGsygTp906u18L0Oimnem",
-    "1rfofaqEpACxVEHIZBJe6W",
-    "6habFhsOp2NvshLv26DqMb",
-    "3B54sVLJ402zGa6Xm4YGNe"
-];
-
-function getSongOfTheDay() {
-    const today = new Date();
-    const seed = today.getFullYear() + today.getMonth() + today.getDate();
-    const index = seed % playlistSongs.length;
-
-    return playlistSongs[index];
-}
-
-function loadSongOfDay() {
-    const track = getSongOfTheDay();
-    document.getElementById("songOfDay").innerHTML = `
-        🎧 Song of the Day:<br><br>
-        <iframe 
-            src="https://open.spotify.com/embed/track/${track}" 
-            width="300" height="80" frameborder="0" 
-            allowtransparency="true" allow="encrypted-media">
-        </iframe>
-    `;
-}
-
-loadSongOfDay();
-
+  })();
 </script>
 
-</body>
-</html>
+<script>
+/* ------------------------------
+   MULTIPLE COUNTDOWNS
+   ------------------------------ */
+(function(){
+  const countdowns = [
+    {id:'countdown-birthday', name:'Birthday', dateStr:'12-03'},
+    {id:'countdown-christmas', name:'Christmas', dateStr:'12-25'},
+    {id:'countdown-easter', name:'Easter', dateFunc: computeEaster },
+    {id:'countdown-halloween', name:'Halloween', dateStr:'10-31'}
+  ];
+
+  function computeEaster(year){
+    // Meeus/Jones algorithm
+    const f = Math.floor,
+      G = year % 19,
+      C = f(year/100),
+      H = (C - f(C/4) - f((8*C+13)/25) + 19*G +15)%30,
+      I = H - f(H/28)*(1 - f(29/(H+1))*f((21-G)/11)),
+      J = (year + f(year/4) + I + 2 - C + f(C/4))%7,
+      L = I - J,
+      month = 3 + f((L+40)/44),
+      day = L + 28 - 31*f(month/4);
+    return new Date(year, month-1, day);
+  }
+
+  function computeNextDate(item){
+    const now = new Date();
+    let target;
+    if(item.dateFunc) target = item.dateFunc(now.getFullYear());
+    else {
+      const parts = item.dateStr.split('-');
+      target = new Date(now.getFullYear(), parseInt(parts[0])-1, parseInt(parts[1]));
+    }
+    if(now>target) {
+      if(item.dateFunc) target = item.dateFunc(now.getFullYear()+1);
+      else target.setFullYear(target.getFullYear()+1);
+    }
+    return target;
+  }
+
+  function update(){
+    const now = new Date();
+    countdowns.forEach(c=>{
+      const target = computeNextDate(c);
+      const diff = Math.max(0, target-now);
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) %24);
+      const mins = Math.floor((diff/ (1000*60))%60);
+      const secs = Math.floor((diff/1000)%60);
+      const el = document.getElementById(c.id);
+      if(diff<1000*60*60*24 && days===0) el.textContent=`🎉 ${c.name}! 🎉`;
+      else el.textContent = `${c.name}: ${days}d ${hours}h ${mins}m ${secs}s`;
+    });
+  }
+  update();
+  setInterval(update,1000);
+})();
+
+/* ------------------------------
+   SONG OF THE DAY CODE
+   (same as before, works with daily random from playlist)
+   ------------------------------ */
+
+(function(){
+  const playlistId = "0F8yGT3rAJjinOwDGd6PVu"; 
+  const playlistUrl = `https://open.spotify.com/playlist/${playlistId}`;
+  const sotdStatus = document.getElementById('sotd-status');
+  const sotdBox = document.getElementById('sotd');
+  const sotdPlayer = document.getElementById('sotd-player');
+  const sotdTitle = document.getElementById('sotd-title');
+  const sotdArtist = document.getElementById('sotd-artist');
+  const sotdOpen = document.getElementById('sotd-open');
+  const fallbackEl = document.getElementById('sotd-fallback');
+  const manualTextarea = document.getElementById('manualTracks');
+  const saveManualBtn = document.getElementById('saveManual');
+  const clearManualBtn = document.getElementById('clearManual');
+  const manualSavedMsg = document.getElementById('manualSavedMsg');
+
+  function extractTrackIds(text) {
+    if(!text) return [];
+    const ids = new Set();
+    const urlRegex = /open\.spotify\.com\/track\/([A-Za-z0-9]+)|spotify:track:([A-Za-z0-9]+)/g;
+    let m;
+    while((m = urlRegex.exec(text)) !== null){ ids.add(m[1]||m[2]); }
+    text.split(/\s+/).forEach(tok=>{ const clean=tok.trim(); if(/^[A-Za-z0-9]{8,32}$/.test(clean)) ids.add(clean); });
+    return Array.from(ids);
+  }
+
+  saveManualBtn.addEventListener('click', ()=>{
+    const ids = extractTrackIds(manualTextarea.value);
+    if(ids.length===0){ manualSavedMsg.textContent="No track URLs/IDs found."; return;}
+    localStorage.setItem('manualTracks_'+playlistId, JSON.stringify(ids));
+    manualSavedMsg.textContent=`Saved ${ids.length} tracks.`;
+    setTimeout(()=> manualSavedMsg.textContent="",3500);
+    renderSongOfTheDay(ids);
+  });
+  clearManualBtn.addEventListener('click', ()=>{
+    localStorage.removeItem('manualTracks_'+playlistId);
+    manualTextarea.value="";
+    manualSavedMsg.textContent="Cleared saved tracks.";
+    setTimeout(()=> manualSavedMsg.textContent="",2500);
+    init();
+  });
+
+  function hashStringToInt(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h+= (h<<1)+(h<<4)+(h<<7)+(h<<8)+(h<<24);}return Math.abs(h>>>0);}
+  function seededPick(list,seedStr){if(!list||list.length===0) return null; const h=hashStringToInt(seedStr); return {id:list[h%list.length],index:h%list.length};}
+
+  function renderSongOfTheDay(trackIds){
+    if(!trackIds||trackIds.length===0){ sotdStatus.textContent="No tracks available yet."; fallbackEl.style.display='block'; return;}
+    fallbackEl.style.display='none';
+    const today = new Date().toISOString().slice(0,10);
+    const seed = playlistId+'|'+today;
+    const chosen = seededPick(trackIds,seed);
+    if(!chosen){ sotdStatus.textContent="Couldn't pick a track."; return;}
+    const tid = chosen.id;
+    sotdStatus.style.display='none'; sotdBox.style.display='block';
+    sotdTitle.textContent = `Track ID: ${tid}`;
+    sotdArtist.textContent = `🎵 Play below or open in Spotify`;
+    sotdPlayer.innerHTML = `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/${tid}" width="300" height="80" frameborder="0" allow="encrypted-media"></iframe>`;
+    sotdOpen.href = `https://open.spotify.com/track/${tid}`;
+  }
+
+  function init(){
+    const saved = localStorage.getItem('manualTracks_'+playlistId);
+    if(saved){ renderSongOfTheDay(JSON.parse(saved)); }
+    else{ renderSongOfTheDay([]); fallbackEl.style.display='block'; }
+  }
+  init();
+})();
+</script>
+
 
 
 
