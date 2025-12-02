@@ -303,9 +303,6 @@
               <div id="sotd-artist" class="muted" style="margin-top:6px"></div>
             </div>
             <div id="sotd-player" class="play-embed" style="margin-top:10px"></div>
-            <div id="sotd-controls" style="margin-top:10px; text-align:center;">
-              <button id="play-background" class="btn">Play in Background</button>
-            </div>
             <div style="margin-top:8px; text-align:center;">
               <a id="sotd-open" target="_blank" rel="noopener" class="small">Open in Spotify</a>
             </div>
@@ -335,7 +332,7 @@
     <div class="timeline">
       <div class="event">
         <h3> ❤️ </h3>
-        <p>Thank you for everything you do moom, even the all the things we dont notice. You're always there for us, and it means a lot more than you think and we say. I hope you like this website, and we love you soooo much!</p>
+        <p>Thank you for everything you do moom, even the all the things we dont notice. You’re always there for us, and it means a lot more than you think and we say. I hope you like this website, and we love you soooo much!</p>
       </div>
       <div class="event">
         <h3>Photo Family Wall:</h3>
@@ -520,7 +517,6 @@
    2) Parse track links (/track/{id}) from the HTML.
    3) If that fails, show a friendly fallback where you can paste track URLs or IDs once (stored in localStorage).
    4) Choose a "random" track for the day by seeding with the current date so it's stable across refreshes that day.
-   5) Add a "Play in Background" button that opens the song in a pop-up window with autoplay enabled.
    ------------------------------ */
 
 (function(){
@@ -532,15 +528,11 @@
   const sotdTitle = document.getElementById('sotd-title');
   const sotdArtist = document.getElementById('sotd-artist');
   const sotdOpen = document.getElementById('sotd-open');
-  const playBackgroundBtn = document.getElementById('play-background');
   const fallbackEl = document.getElementById('sotd-fallback');
   const manualTextarea = document.getElementById('manualTracks');
   const saveManualBtn = document.getElementById('saveManual');
   const clearManualBtn = document.getElementById('clearManual');
   const manualSavedMsg = document.getElementById('manualSavedMsg');
-
-  // Store the current track ID for the background player
-  let currentTrackId = null;
 
   // util: extract track ids from a string (ids or full urls)
   function extractTrackIds(text) {
@@ -583,36 +575,6 @@
     init();
   });
 
-  // Play in background button click handler
-  playBackgroundBtn.addEventListener('click', () => {
-    if (!currentTrackId) return;
-    
-    // Open a small popup window with the Spotify embed player
-    const popup = window.open(
-      `https://open.spotify.com/embed/track/${currentTrackId}?utm_source=oembed&autoplay=1`,
-      'spotify-player',
-      'width=300,height=80,resizable=no,scrollbars=no,status=no'
-    );
-    
-    // Add a message to the user
-    const message = document.createElement('div');
-    message.className = 'muted small';
-    message.style.marginTop = '10px';
-    message.textContent = 'Song opened in a pop-up window. Keep it open to continue playing.';
-    sotdPlayer.appendChild(message);
-    
-    // Change button text to indicate it's playing
-    playBackgroundBtn.textContent = 'Playing in Background';
-    playBackgroundBtn.disabled = true;
-    
-    // Check if popup was blocked
-    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-      message.textContent = 'Pop-up was blocked by your browser. Please allow pop-ups for this site and try again.';
-      playBackgroundBtn.textContent = 'Play in Background';
-      playBackgroundBtn.disabled = false;
-    }
-  });
-
   // Seeded random: hash a string to number
   function hashStringToInt(s){
     let h=2166136261;
@@ -645,13 +607,8 @@
       return;
     }
     const tid = chosen.id;
-    currentTrackId = tid; // Store for background player
     sotdStatus.style.display = 'none';
     sotdBox.style.display = 'block';
-
-    // Reset button state
-    playBackgroundBtn.textContent = 'Play in Background';
-    playBackgroundBtn.disabled = false;
 
     // Embed small track player
     const embedHtml = `<iframe src="https://open.spotify.com/embed/track/${tid}" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media" style="border-radius:8px;"></iframe>`;
