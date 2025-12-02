@@ -29,6 +29,22 @@
     padding:20px;
   }
 
+  .photo-wall {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.round-img {
+  width: 250px;
+  height: auto;
+  border-radius: 20px; /* round edges */
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
   header {
     text-align:center;
     margin-bottom:18px;
@@ -322,8 +338,8 @@
         <h3>Photo Family Wall:</h3>
         <p>Special trips, celebrations, and memories together.</p>
         <div class="photo-wall">
-          <img src="images/1image.jpg">
-          <img src="images/2image.jpg">
+          <img src="images/1image.jpg" class="round-img">
+          <img src="images/2image.jpg" class="round-img">
         </div>
       </div>
       <div class="event">
